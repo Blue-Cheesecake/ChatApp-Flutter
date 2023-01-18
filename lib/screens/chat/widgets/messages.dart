@@ -38,6 +38,7 @@ class Messages extends StatelessWidget {
             return Message(
               text: docs[index]['text'],
               isMyMessage: isMyMessage,
+              key: ValueKey(docs[index].id),
             );
           },
         );

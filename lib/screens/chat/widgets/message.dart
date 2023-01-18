@@ -9,8 +9,9 @@ class Message extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const radius = Radius.circular(10);
+    const radius = Radius.circular(16.6);
     const zero = Radius.zero;
+
     return Row(
       mainAxisAlignment:
           isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
