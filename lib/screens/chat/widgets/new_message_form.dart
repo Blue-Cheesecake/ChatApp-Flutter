@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessageForm extends StatefulWidget {
@@ -16,6 +17,7 @@ class _NewMessageFormState extends State<NewMessageForm> {
     FirebaseFirestore.instance.collection("chat").add({
       "text": _msgCtr.text,
       "createdAt": Timestamp.now(),
+      "createdById": FirebaseAuth.instance.currentUser?.uid,
     });
     _msgCtr.text = "";
   }

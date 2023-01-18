@@ -1,4 +1,6 @@
+import 'package:chatapp/screens/chat/widgets/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatelessWidget {
@@ -26,10 +28,17 @@ class Messages extends StatelessWidget {
 
         List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
             snapshot.data!.docs;
+
         return ListView.builder(
           itemCount: docs.length,
           itemBuilder: (context, index) {
-            return Text(docs[index]['text']);
+            bool isMyMessage = FirebaseAuth.instance.currentUser?.uid ==
+                docs[index]['createdById'];
+
+            return Message(
+              text: docs[index]['text'],
+              isMyMessage: isMyMessage,
+            );
           },
         );
       },
