@@ -40,6 +40,8 @@ class _AuthFormState extends State<AuthForm> {
       // Save method will trigger in FormField in onsaved attribute
       _formKey.currentState?.save();
 
+      // print("Auth form ${_userEmail} ${_userPassword.trim()}");
+
       widget.callback(
         _userEmail.trim(),
         _userUsername.trim(),

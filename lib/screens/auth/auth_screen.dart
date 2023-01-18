@@ -34,8 +34,10 @@ class _AuthScreenState extends State<AuthScreen> {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       if (loginMode) {
+        // print(email);
+        // print(password);
         await auth.signInWithEmailAndPassword(
-          email: email,
+          email: username,
           password: password,
         );
         print("Successfully login");
