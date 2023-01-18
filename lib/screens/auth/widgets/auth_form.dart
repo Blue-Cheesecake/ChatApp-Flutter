@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm({Key? key, required this.callback}) : super(key: key);
+  const AuthForm(this.isLoading, {Key? key, required this.callback})
+      : super(key: key);
+
+  final bool isLoading;
 
   final Function(
     String email,
@@ -115,15 +118,17 @@ class _AuthFormState extends State<AuthForm> {
 
                 const SizedBox(height: 12),
 
-                ElevatedButton(
-                  onPressed: _trySubmit,
-                  child: Text(_loginMode ? "Login" : "Signup"),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                widget.isLoading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _trySubmit,
+                        child: Text(_loginMode ? "Login" : "Signup"),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
                 TextButton(
                   onPressed: () {
                     setState(() {
