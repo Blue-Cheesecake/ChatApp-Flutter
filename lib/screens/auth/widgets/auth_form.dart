@@ -8,6 +8,7 @@ class AuthForm extends StatefulWidget {
     String username,
     String password,
     bool loginMode,
+    BuildContext context,
   ) callback;
 
   @override
@@ -37,10 +38,11 @@ class _AuthFormState extends State<AuthForm> {
       _formKey.currentState?.save();
 
       widget.callback(
-        _userEmail,
-        _userUsername,
-        _userPassword,
+        _userEmail.trim(),
+        _userUsername.trim(),
+        _userPassword.trim(),
         _loginMode,
+        context,
       );
     }
   }
