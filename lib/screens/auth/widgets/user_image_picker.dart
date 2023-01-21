@@ -18,7 +18,12 @@ class _UserImagePickerState extends State<UserImagePicker> {
   final _imagePicker = ImagePicker();
 
   void _pickImage() async {
-    XFile? picked = await _imagePicker.pickImage(source: ImageSource.gallery);
+    XFile? picked = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+
     setState(() {
       _image = picked;
     });
@@ -32,15 +37,14 @@ class _UserImagePickerState extends State<UserImagePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         /// Image Avatar
         CircleAvatar(
           radius: 35,
           backgroundImage: _image == null
               ? null
               : FileImage(
-            File(_image!.path),
-          ),
+                  File(_image!.path),
+                ),
         ),
 
         TextButton(

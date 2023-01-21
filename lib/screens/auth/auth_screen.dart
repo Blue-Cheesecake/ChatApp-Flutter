@@ -18,14 +18,12 @@ class _AuthScreenState extends State<AuthScreen> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   var _isLoading = false;
 
-  void _submitForm(
-    String email,
-    String username,
-    String password,
-    bool loginMode,
-    File imageFile,
-    BuildContext context,
-  ) async {
+  void _submitForm(String email,
+      String username,
+      String password,
+      bool loginMode,
+      File imageFile,
+      BuildContext context,) async {
     // print("From callback");
     // print(email);
     // print(username);
@@ -50,7 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
       // Create new user
       else {
         UserCredential userCredential =
-            await auth.createUserWithEmailAndPassword(
+        await auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -59,12 +57,16 @@ class _AuthScreenState extends State<AuthScreen> {
             .ref()
             .child("user_images")
             .child(userCredential.user?.uid ?? "error_file");
-        storageRef.putFile(imageFile);
+        await storageRef.putFile(imageFile);
+
+        String imageUrl = await storageRef.getDownloadURL();
 
         // Register username and email to Firestore
         db.collection('users').doc(userCredential.user!.uid).set({
           'username': username,
           'email': email,
+          "imageUrl": imageUrl,
+
         });
       }
     } on FirebaseAuthException catch (error) {
@@ -78,7 +80,9 @@ class _AuthScreenState extends State<AuthScreen> {
           message,
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Theme.of(context).errorColor,
+        backgroundColor: Theme
+            .of(context)
+            .errorColor,
       ));
     } catch (error) {
       print("Unknown Error");
@@ -93,7 +97,9 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme
+          .of(context)
+          .primaryColor,
       body: SafeArea(
         child: AuthForm(_isLoading, callback: _submitForm),
       ),
