@@ -32,13 +32,27 @@ class Messages extends StatelessWidget {
         return ListView.builder(
           itemCount: docs.length,
           itemBuilder: (context, index) {
-            bool isMyMessage = FirebaseAuth.instance.currentUser?.uid ==
-                docs[index]['createdById'];
+            User? currentUser = FirebaseAuth.instance.currentUser;
+            String? id = currentUser?.uid;
+            bool isMyMessage = id == docs[index]['createdById'];
 
-            return Message(
-              text: docs[index]['text'],
-              isMyMessage: isMyMessage,
-              key: ValueKey(docs[index].id),
+            return FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(docs[index]['createdById'])
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                return Message(
+                  text: docs[index]['text'],
+                  isMyMessage: isMyMessage,
+                  key: ValueKey(docs[index].id),
+                  username: snapshot.data?.data()?["username"],
+                );
+              },
             );
           },
         );

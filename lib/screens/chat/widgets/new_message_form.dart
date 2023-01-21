@@ -12,12 +12,19 @@ class NewMessageForm extends StatefulWidget {
 class _NewMessageFormState extends State<NewMessageForm> {
   final _msgCtr = TextEditingController();
 
-  void _submitMessage() {
+  void _submitMessage() async {
     FocusScope.of(context).unfocus();
+    String? id = FirebaseAuth.instance.currentUser?.uid;
+    DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
+        .instance
+        .collection("users")
+        .doc(id ?? "")
+        .get();
     FirebaseFirestore.instance.collection("chat").add({
       "text": _msgCtr.text,
       "createdAt": Timestamp.now(),
-      "createdById": FirebaseAuth.instance.currentUser?.uid,
+      "createdById": id ?? "",
+      "createdByUsername": userData["username"]
     });
     _msgCtr.text = "";
   }
