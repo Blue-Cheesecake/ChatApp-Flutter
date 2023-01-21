@@ -51,6 +51,7 @@ class Messages extends StatelessWidget {
                   isMyMessage: isMyMessage,
                   key: ValueKey(docs[index].id),
                   username: snapshot.data?.data()?["username"],
+                  userImageUrl: snapshot.data?.data()?["imageUrl"],
                 );
               },
             );

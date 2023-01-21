@@ -5,22 +5,31 @@ class Message extends StatelessWidget {
       {Key? key,
       required this.text,
       required this.isMyMessage,
-      required this.username})
+      required this.username,
+      required this.userImageUrl})
       : super(key: key);
 
   final String text;
   final bool isMyMessage;
   final String username;
+  final String userImageUrl;
 
   @override
   Widget build(BuildContext context) {
     const radius = Radius.circular(16.6);
     const zero = Radius.zero;
+    Widget avartar = CircleAvatar(
+      radius: 20,
+      backgroundImage: NetworkImage(userImageUrl),
+    );
 
     return Row(
       mainAxisAlignment:
           isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (!isMyMessage) avartar,
+        if (!isMyMessage) const SizedBox(width: 10),
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment:

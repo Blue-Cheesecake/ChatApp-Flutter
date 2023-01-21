@@ -37,12 +37,12 @@ class _AuthFormState extends State<AuthForm> {
   final _passwordCtr = TextEditingController();
 
   void _trySubmit() {
-    bool isValid = _formKey.currentState!.validate() && _imageFile != null;
-
+    bool isValid = _formKey.currentState!.validate();
     // Remove the displaying keyboard
     FocusScope.of(context).unfocus();
 
-    if (_imageFile == null) {
+    if (!_loginMode && _imageFile == null) {
+      isValid = false;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Please provide the image"),
@@ -61,7 +61,7 @@ class _AuthFormState extends State<AuthForm> {
         _userUsername.trim(),
         _userPassword.trim(),
         _loginMode,
-        File(_imageFile!.path),
+        File(_imageFile?.path ?? ""),
         context,
       );
     }

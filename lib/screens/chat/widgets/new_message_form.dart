@@ -24,7 +24,8 @@ class _NewMessageFormState extends State<NewMessageForm> {
       "text": _msgCtr.text,
       "createdAt": Timestamp.now(),
       "createdById": id ?? "",
-      "createdByUsername": userData["username"]
+      "createdByUsername": userData["username"],
+      "imageUrl": userData["imageUrl"],
     });
     _msgCtr.text = "";
   }
