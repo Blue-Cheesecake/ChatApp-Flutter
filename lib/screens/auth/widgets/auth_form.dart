@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:chatapp/screens/auth/widgets/user_image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm(this.isLoading, {Key? key, required this.callback})
@@ -11,6 +15,7 @@ class AuthForm extends StatefulWidget {
     String username,
     String password,
     bool loginMode,
+    File imageFile,
     BuildContext context,
   ) callback;
 
@@ -25,16 +30,25 @@ class _AuthFormState extends State<AuthForm> {
   var _userPassword = "";
 
   var _loginMode = false;
+  XFile? _imageFile;
 
   // TextController
   final _userCtr = TextEditingController();
   final _passwordCtr = TextEditingController();
 
   void _trySubmit() {
-    bool isValid = _formKey.currentState!.validate();
+    bool isValid = _formKey.currentState!.validate() && _imageFile != null;
 
     // Remove the displaying keyboard
     FocusScope.of(context).unfocus();
+
+    if (_imageFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Please provide the image"),
+            backgroundColor: Colors.red),
+      );
+    }
 
     if (isValid) {
       // Save method will trigger in FormField in onsaved attribute
@@ -47,6 +61,7 @@ class _AuthFormState extends State<AuthForm> {
         _userUsername.trim(),
         _userPassword.trim(),
         _loginMode,
+        File(_imageFile!.path),
         context,
       );
     }
@@ -64,6 +79,13 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                !_loginMode
+                    ? UserImagePicker(
+                        assignImageFileFunc: (imageXFile) =>
+                            _imageFile = imageXFile,
+                      )
+                    : const SizedBox.shrink(),
+
                 /// Email
                 ///
                 if (!_loginMode)
