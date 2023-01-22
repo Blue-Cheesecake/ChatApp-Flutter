@@ -18,7 +18,7 @@ class Message extends StatelessWidget {
   Widget build(BuildContext context) {
     const radius = Radius.circular(16.6);
     const zero = Radius.zero;
-    Widget avartar = CircleAvatar(
+    Widget avatar = CircleAvatar(
       radius: 20,
       backgroundImage: NetworkImage(userImageUrl),
     );
@@ -28,7 +28,7 @@ class Message extends StatelessWidget {
           isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!isMyMessage) avartar,
+        if (!isMyMessage) avatar,
         if (!isMyMessage) const SizedBox(width: 10),
         Column(
           mainAxisSize: MainAxisSize.min,
@@ -37,8 +37,8 @@ class Message extends StatelessWidget {
           children: [
             Container(
               width: 150,
-              padding: EdgeInsets.all(15),
-              margin: EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
                 color: isMyMessage
                     ? Colors.grey.shade200

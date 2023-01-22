@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatelessWidget {
-  const Messages({Key? key}) : super(key: key);
+  const Messages({Key? key, required this.messagesScrollCtr}) : super(key: key);
+
+  final ScrollController messagesScrollCtr;
 
   @override
   Widget build(BuildContext context) {
@@ -15,21 +17,23 @@ class Messages extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
 
         if (!snapshot.hasData) {
-          return Text("No Data");
+          return const Text("No Data");
         }
 
         if (snapshot.hasError) {
-          return Text("Error");
+          return const Text("Error");
         }
 
         List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
             snapshot.data!.docs;
 
         return ListView.builder(
+          controller: messagesScrollCtr,
+          shrinkWrap: true,
           itemCount: docs.length,
           itemBuilder: (context, index) {
             User? currentUser = FirebaseAuth.instance.currentUser;
@@ -43,7 +47,7 @@ class Messages extends StatelessWidget {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const SizedBox.shrink();
                 }
 
                 return Message(

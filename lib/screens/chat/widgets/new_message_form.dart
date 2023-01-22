@@ -3,7 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessageForm extends StatefulWidget {
-  NewMessageForm({Key? key}) : super(key: key);
+  const NewMessageForm({Key? key, required this.scrollMessageDownFn})
+      : super(key: key);
+
+  final Function scrollMessageDownFn;
 
   @override
   State<NewMessageForm> createState() => _NewMessageFormState();
@@ -28,6 +31,8 @@ class _NewMessageFormState extends State<NewMessageForm> {
       "imageUrl": userData["imageUrl"],
     });
     _msgCtr.text = "";
+
+    widget.scrollMessageDownFn();
   }
 
   @override
@@ -40,9 +45,20 @@ class _NewMessageFormState extends State<NewMessageForm> {
           Expanded(
             child: TextField(
               controller: _msgCtr,
-              decoration: InputDecoration(
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+              ),
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(20),
                 labelText: "New message",
-                border: null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(99)),
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                    width: 1.2,
+                  ),
+                ),
               ),
               onChanged: (value) => setState(() {}),
             ),

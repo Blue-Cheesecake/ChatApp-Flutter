@@ -12,6 +12,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final _messagesScrollController = ScrollController();
+
   @override
   void initState() {
     FirebaseMessaging fbm = FirebaseMessaging.instance;
@@ -19,28 +21,43 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
+  void _scrollMessageDown() {
+    _messagesScrollController.animateTo(
+      _messagesScrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // List of message
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat"),
+        centerTitle: true,
+        title: const Text(
+          "Public Room",
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 2,
+          ),
+        ),
         actions: [
           DropdownButton(
+            underline: const SizedBox.shrink(),
             items: [
               DropdownMenuItem(
                 value: "logout",
-                child: Container(
-                  child: Row(
-                    children: const [
-                      Icon(
-                        Icons.exit_to_app,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(width: 8),
-                      Text("Logout"),
-                    ],
-                  ),
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(width: 8),
+                    Text("Logout"),
+                  ],
                 ),
               )
             ],
@@ -57,19 +74,19 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: SafeArea(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Messages(),
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Messages(messagesScrollCtr: _messagesScrollController),
               ),
-              NewMessageForm(),
-            ],
-          ),
+            ),
+            NewMessageForm(
+              scrollMessageDownFn: _scrollMessageDown,
+            ),
+          ],
         ),
       ),
     );
