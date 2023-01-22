@@ -40,6 +40,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
         /// Image Avatar
         CircleAvatar(
           radius: 35,
+          backgroundColor: Colors.lightBlue,
           backgroundImage: _image == null
               ? null
               : FileImage(
@@ -52,10 +53,16 @@ class _UserImagePickerState extends State<UserImagePicker> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Add Image"),
-              const SizedBox(width: 5),
-              Icon(Icons.image),
+            children: const [
+              Text(
+                "Add Image",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(width: 5),
+              Icon(Icons.image_rounded),
             ],
           ),
         ),

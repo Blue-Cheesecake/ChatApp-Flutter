@@ -88,39 +88,39 @@ class _AuthFormState extends State<AuthForm> {
 
                 /// Email
                 ///
-                if (!_loginMode)
-                  TextFormField(
-                    validator: (value) {
-                      if (value!.isEmpty || !value.contains('@')) {
-                        return "Please enter a valid email address.";
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: "Email Address",
-                    ),
-                    onSaved: (newValue) {
-                      _userEmail = newValue ?? "";
-                    },
-                  ),
-
-                // Username
                 TextFormField(
-                  controller: _userCtr,
                   validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Username can't be empty";
+                    if (value!.isEmpty || !value.contains('@')) {
+                      return "Please enter a valid email address.";
                     }
                     return null;
                   },
-                  decoration: InputDecoration(
-                    labelText: "Username",
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: "Email Address",
                   ),
                   onSaved: (newValue) {
-                    _userUsername = newValue ?? "";
+                    _userEmail = newValue ?? "";
                   },
                 ),
+
+                // Username
+                if (!_loginMode)
+                  TextFormField(
+                    controller: _userCtr,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Username can't be empty";
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Username",
+                    ),
+                    onSaved: (newValue) {
+                      _userUsername = newValue ?? "";
+                    },
+                  ),
 
                 // Password
                 TextFormField(
@@ -132,7 +132,7 @@ class _AuthFormState extends State<AuthForm> {
                     return null;
                   },
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Password",
                   ),
                   onSaved: (newValue) {
@@ -146,17 +146,20 @@ class _AuthFormState extends State<AuthForm> {
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: _trySubmit,
-                        child: Text(_loginMode ? "Login" : "Signup"),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                         ),
+                        child: Text(_loginMode ? "Login" : "Signup"),
                       ),
+
+                // Switch
                 TextButton(
                   onPressed: () {
                     setState(() {
                       _loginMode = !_loginMode;
+                      _formKey.currentState!.reset();
 
                       FocusScope.of(context).unfocus();
                       _userCtr.text = "";
