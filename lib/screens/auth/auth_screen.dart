@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chatapp/constants/firebase_collection.dart';
 import 'package:chatapp/screens/auth/widgets/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,7 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
         // Define the path of file
         Reference storageRef = FirebaseStorage.instance
             .ref()
-            .child("user_images")
+            .child(FirebaseCollectionName.storage.userImages)
             .child(userCredential.user?.uid ?? "error_file");
 
         // Actual uploading the file to the path
@@ -70,7 +71,10 @@ class _AuthScreenState extends State<AuthScreen> {
         String imageUrl = await storageRef.getDownloadURL();
 
         // Register username and email to Firestore
-        db.collection('users').doc(userCredential.user!.uid).set({
+        db
+            .collection(FirebaseCollectionName.firestore.users)
+            .doc(userCredential.user!.uid)
+            .set({
           'username': username,
           'email': email,
           "imageUrl": imageUrl,

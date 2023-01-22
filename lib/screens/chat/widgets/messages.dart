@@ -1,3 +1,4 @@
+import 'package:chatapp/constants/firebase_collection.dart';
 import 'package:chatapp/screens/chat/widgets/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +13,7 @@ class Messages extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
-          .collection("chat")
+          .collection(FirebaseCollectionName.firestore.chat)
           .orderBy("createdAt")
           .snapshots(),
       builder: (context, snapshot) {
@@ -42,7 +43,7 @@ class Messages extends StatelessWidget {
 
             return FutureBuilder(
               future: FirebaseFirestore.instance
-                  .collection("users")
+                  .collection(FirebaseCollectionName.firestore.users)
                   .doc(docs[index]['createdById'])
                   .get(),
               builder: (context, snapshot) {
