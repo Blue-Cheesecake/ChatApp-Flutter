@@ -1,6 +1,7 @@
 import 'package:chatapp/screens/chat/widgets/messages.dart';
 import 'package:chatapp/screens/chat/widgets/new_message_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -11,6 +12,13 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    FirebaseMessaging fbm = FirebaseMessaging.instance;
+    fbm.requestPermission();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // List of message
