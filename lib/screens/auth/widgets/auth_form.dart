@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:chatapp/models/user_dto.dart';
+import 'package:chatapp/models/user_register.dart';
 import 'package:chatapp/screens/auth/widgets/user_image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm(this.isLoading, {Key? key, required this.callback})
@@ -11,13 +12,11 @@ class AuthForm extends StatefulWidget {
   final bool isLoading;
 
   final Function(
-    String email,
-    String username,
-    String password,
-    bool loginMode,
-    File imageFile,
-    BuildContext context,
-  ) callback;
+      bool loginMode,
+      BuildContext context, {
+      UserRegister? requestRegister,
+      UserDto? requestDto,
+      }) callback;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -25,12 +24,10 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
-  var _userEmail = "";
-  var _userUsername = "";
-  var _userPassword = "";
+  final _userDto = UserDto();
+  final _userRegister = UserRegister();
 
   var _loginMode = false;
-  XFile? _imageFile;
 
   // TextController
   final _userCtr = TextEditingController();
@@ -41,7 +38,7 @@ class _AuthFormState extends State<AuthForm> {
     // Remove the displaying keyboard
     FocusScope.of(context).unfocus();
 
-    if (!_loginMode && _imageFile == null) {
+    if (!_loginMode && _userRegister.imageFile == null) {
       isValid = false;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -55,15 +52,19 @@ class _AuthFormState extends State<AuthForm> {
       _formKey.currentState?.save();
 
       // print("Auth form ${_userEmail} ${_userPassword.trim()}");
-
-      widget.callback(
-        _userEmail.trim(),
-        _userUsername.trim(),
-        _userPassword.trim(),
-        _loginMode,
-        File(_imageFile?.path ?? ""),
-        context,
-      );
+      if (_loginMode) {
+        widget.callback(
+          _loginMode,
+          context,
+          requestDto: _userDto,
+        );
+      } else {
+        widget.callback(
+          _loginMode,
+          context,
+          requestRegister: _userRegister,
+        );
+      }
     }
   }
 
@@ -81,9 +82,9 @@ class _AuthFormState extends State<AuthForm> {
               children: [
                 !_loginMode
                     ? UserImagePicker(
-                        assignImageFileFunc: (imageXFile) =>
-                            _imageFile = imageXFile,
-                      )
+                  assignImageFileFunc: (imageXFile) =>
+                  _userRegister.imageFile = File(imageXFile.path),
+                )
                     : const SizedBox.shrink(),
 
                 /// Email
@@ -100,7 +101,9 @@ class _AuthFormState extends State<AuthForm> {
                     labelText: "Email Address",
                   ),
                   onSaved: (newValue) {
-                    _userEmail = newValue ?? "";
+                    // _userEmail = newValue ?? "";
+                    _userRegister.email = newValue?.trim() ?? "";
+                    _userDto.email = newValue?.trim() ?? "";
                   },
                 ),
 
@@ -118,7 +121,7 @@ class _AuthFormState extends State<AuthForm> {
                       labelText: "Username",
                     ),
                     onSaved: (newValue) {
-                      _userUsername = newValue ?? "";
+                      _userRegister.username = newValue?.trim() ?? "";
                     },
                   ),
 
@@ -136,7 +139,8 @@ class _AuthFormState extends State<AuthForm> {
                     labelText: "Password",
                   ),
                   onSaved: (newValue) {
-                    _userPassword = newValue ?? "";
+                    _userRegister.password = newValue?.trim() ?? "";
+                    _userDto.password = newValue?.trim() ?? "";
                   },
                 ),
 
@@ -145,14 +149,14 @@ class _AuthFormState extends State<AuthForm> {
                 widget.isLoading
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
-                        onPressed: _trySubmit,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: Text(_loginMode ? "Login" : "Signup"),
-                      ),
+                  onPressed: _trySubmit,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: Text(_loginMode ? "Login" : "Signup"),
+                ),
 
                 // Switch
                 TextButton(

@@ -1,10 +1,9 @@
-import 'dart:io';
-
-import 'package:chatapp/constants/firebase_collection.dart';
+import 'package:chatapp/models/user_dto.dart';
+import 'package:chatapp/models/user_register.dart';
+import 'package:chatapp/screens/auth/utils/submit_form_utils.dart';
 import 'package:chatapp/screens/auth/widgets/auth_form.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -20,65 +19,32 @@ class _AuthScreenState extends State<AuthScreen> {
   var _isLoading = false;
 
   void _submitForm(
-    String email,
-    String username,
-    String password,
     bool loginMode,
-    File imageFile,
-    BuildContext context,
-  ) async {
-    // print("From callback");
-    // print(email);
-    // print(username);
-    // print(password);
-
+    BuildContext context, {
+    UserRegister? requestRegister,
+    UserDto? requestDto,
+  }) async {
     // Do Sign in
+
     setState(() {
       _isLoading = true;
     });
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       if (loginMode) {
-        // print(email);
-        // print(password);
+        if (requestDto == null) {
+          throw NullThrownError();
+        }
 
-        await auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        // print("Successfully login");
-        // print("Navigating to Chat screen");
+        await SubmitFormUtils.loginUser(requestDto);
       }
       // Create new user
       else {
-        UserCredential userCredential =
-            await auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+        if (requestRegister == null) {
+          throw NullThrownError();
+        }
 
-        // Define the path of file
-        Reference storageRef = FirebaseStorage.instance
-            .ref()
-            .child(FirebaseCollectionName.storage.userImages)
-            .child(userCredential.user?.uid ?? "error_file");
-
-        // Actual uploading the file to the path
-        await storageRef.putFile(imageFile);
-
-        // Get the URL
-        String imageUrl = await storageRef.getDownloadURL();
-
-        // Register username and email to Firestore
-        db
-            .collection(FirebaseCollectionName.firestore.users)
-            .doc(userCredential.user!.uid)
-            .set({
-          'username': username,
-          'email': email,
-          "imageUrl": imageUrl,
-        });
+        await SubmitFormUtils.registerUser(requestRegister);
       }
     } on FirebaseAuthException catch (error) {
       var message = "An error occurred. Please check you credentials!";
