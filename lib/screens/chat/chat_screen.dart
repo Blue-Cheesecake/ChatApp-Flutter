@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({Key? key}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -21,10 +21,13 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
+  /// Somehow it work only iOS device
+  ///
+  ///
   void _scrollMessageDown() {
     _messagesScrollController.animateTo(
       _messagesScrollController.position.maxScrollExtent,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
     );
   }

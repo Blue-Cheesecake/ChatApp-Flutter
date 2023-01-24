@@ -53,7 +53,7 @@ class SubmitFormUtils {
         )
         .doc(userCredential.user!.uid);
 
-    dbRef.set(userCollection);
+    await dbRef.set(userCollection);
   }
 
   static Future<void> loginUser(UserDto request) async {
