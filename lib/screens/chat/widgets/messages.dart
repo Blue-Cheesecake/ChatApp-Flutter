@@ -1,27 +1,23 @@
-import 'package:chatapp/constants/firebase_collection.dart';
 import 'package:chatapp/models/chat.dart';
 import 'package:chatapp/models/user_collection.dart';
 import 'package:chatapp/screens/chat/widgets/message.dart';
+import 'package:chatapp/view_models/chat/chat_vm.dart';
+import 'package:chatapp/view_models/users/users_vm.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatelessWidget {
-  const Messages({Key? key, required this.messagesScrollCtr}) : super(key: key);
+  Messages({Key? key, required this.messagesScrollCtr}) : super(key: key);
 
   final ScrollController messagesScrollCtr;
+  final _chatVM = ChatVM();
+  final _usersVM = UsersVM();
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection(FirebaseCollectionName.firestore.chat)
-          .withConverter(
-        fromFirestore: Chat.fromFirestore,
-        toFirestore: (value, options) => Chat().toFirestore(),
-      )
-          .orderBy("createdAt")
-          .snapshots(),
+      stream: _chatVM.getChatStream(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -48,15 +44,7 @@ class Messages extends StatelessWidget {
             bool isMyMessage = id == chat.createdById;
 
             return FutureBuilder(
-              future: FirebaseFirestore.instance
-                  .collection(FirebaseCollectionName.firestore.users)
-                  .doc(chat.createdById)
-                  .withConverter(
-                fromFirestore: UserCollection.fromFirestore,
-                toFirestore: (value, options) =>
-                    UserCollection().toFirestore(),
-              )
-                  .get(),
+              future: _usersVM.getSingleUserWithChatId(chat.createdById),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const SizedBox.shrink();
