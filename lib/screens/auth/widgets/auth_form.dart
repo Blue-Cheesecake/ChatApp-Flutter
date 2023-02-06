@@ -12,11 +12,11 @@ class AuthForm extends StatefulWidget {
   final bool isLoading;
 
   final Function(
-      bool loginMode,
-      BuildContext context, {
-      UserRegister? requestRegister,
-      UserDto? requestDto,
-      }) callback;
+    bool loginMode,
+    BuildContext context, {
+    UserRegister? requestRegister,
+    UserDto? requestDto,
+  }) callback;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -73,6 +73,7 @@ class _AuthFormState extends State<AuthForm> {
     return Center(
       child: Card(
         margin: const EdgeInsets.all(20),
+        elevation: 0,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(18),
           child: Form(
@@ -82,9 +83,9 @@ class _AuthFormState extends State<AuthForm> {
               children: [
                 !_loginMode
                     ? UserImagePicker(
-                  assignImageFileFunc: (imageXFile) =>
-                  _userRegister.imageFile = File(imageXFile.path),
-                )
+                        assignImageFileFunc: (imageXFile) =>
+                            _userRegister.imageFile = File(imageXFile.path),
+                      )
                     : const SizedBox.shrink(),
 
                 /// Email
@@ -149,17 +150,27 @@ class _AuthFormState extends State<AuthForm> {
                 widget.isLoading
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
-                  onPressed: _trySubmit,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: Text(_loginMode ? "Login" : "Signup"),
-                ),
+                        onPressed: _trySubmit,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Text(_loginMode ? "Login" : "Signup"),
+                      ),
 
                 // Switch
                 TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.resolveWith(
+                        (_) => const Color.fromRGBO(240, 240, 240, 1)),
+                    padding: MaterialStateProperty.resolveWith(
+                      (_) => const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 15,
+                      ),
+                    ),
+                  ),
                   onPressed: () {
                     setState(() {
                       _loginMode = !_loginMode;

@@ -30,6 +30,7 @@ class Main extends StatelessWidget {
       title: 'Material App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        useMaterial3: true,
         primaryColor: Colors.blue,
         colorScheme:
             ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
@@ -40,7 +41,7 @@ class Main extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ChatScreen();
+            return const ChatScreen();
           }
           return const AuthScreen();
         },
