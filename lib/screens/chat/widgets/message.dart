@@ -23,45 +23,48 @@ class Message extends StatelessWidget {
       backgroundImage: NetworkImage(userImageUrl),
     );
 
-    return Row(
-      mainAxisAlignment:
-          isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (!isMyMessage) avatar,
-        if (!isMyMessage) const SizedBox(width: 10),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment:
-              isMyMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 150,
-              padding: const EdgeInsets.all(15),
-              margin: const EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: isMyMessage
-                    ? Colors.grey.shade200
-                    : Colors.deepPurpleAccent.shade400,
-                borderRadius: BorderRadius.only(
-                  topRight: radius,
-                  topLeft: radius,
-                  bottomLeft: isMyMessage ? radius : zero,
-                  bottomRight: isMyMessage ? zero : radius,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment:
+            isMyMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!isMyMessage) avatar,
+          if (!isMyMessage) const SizedBox(width: 10),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment:
+                isMyMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 150,
+                padding: const EdgeInsets.all(15),
+                margin: const EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  color: isMyMessage
+                      ? Colors.grey.shade200
+                      : Colors.deepPurpleAccent.shade400,
+                  borderRadius: BorderRadius.only(
+                    topRight: radius,
+                    topLeft: radius,
+                    bottomLeft: isMyMessage ? radius : zero,
+                    bottomRight: isMyMessage ? zero : radius,
+                  ),
+                ),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: isMyMessage ? Colors.black : Colors.white,
+                  ),
                 ),
               ),
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: isMyMessage ? Colors.black : Colors.white,
-                ),
-              ),
-            ),
-            Text(isMyMessage ? "Me" : username),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ],
+              Text(isMyMessage ? "Me" : username),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

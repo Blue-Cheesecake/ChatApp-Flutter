@@ -151,10 +151,15 @@ class _AuthFormState extends State<AuthForm> {
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: _trySubmit,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.resolveWith(
+                            (_) => const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
                           ),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (_) => const Color.fromRGBO(240, 240, 240, 1)),
                         ),
                         child: Text(_loginMode ? "Login" : "Signup"),
                       ),

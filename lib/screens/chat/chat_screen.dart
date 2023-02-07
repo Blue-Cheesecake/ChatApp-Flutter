@@ -37,13 +37,23 @@ class _ChatScreenState extends State<ChatScreen> {
     // List of message
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 5,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         title: const Text(
           "Public Room",
           style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 2,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 2,
+              color: Colors.white),
+        ),
+        bottom: const PreferredSize(
+          preferredSize: Size(double.infinity, 0),
+          child: Divider(
+            height: 0,
+            thickness: 1.5,
           ),
         ),
         actions: [
@@ -56,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: const [
                     Icon(
                       Icons.exit_to_app,
-                      color: Colors.grey,
+                      color: Colors.black,
                     ),
                     SizedBox(width: 8),
                     Text("Logout"),
@@ -82,7 +92,11 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.only(
+                  left: 15,
+                  right: 15,
+                  bottom: 15,
+                ),
                 child: Messages(messagesScrollCtr: _messagesScrollController),
               ),
             ),
