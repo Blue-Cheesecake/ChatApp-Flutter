@@ -2,8 +2,10 @@
 
 A cross-platform simple chat app that allows users to connect and communicate with each other in real-time. The app is built using Flutter, a popular UI toolkit for building natively compiled applications for mobile, web, and desktop, as the frontend, and Firebase, a cloud-based platform for developing and hosting web applications, as the backend. With its user-friendly interface and robust features, Simple Chat App is the perfect solution for those who want to connect and chat with others.
 
-- []()
-- [Features](#features)
+
+- [ChatApp-Flutter](#chatapp-flutter)
+  - [Getting Started](#getting-started)
+  - [Features](#features)
 
 
 ## Getting Started
@@ -31,7 +33,7 @@ flutter run
 
 ## Features
 
-- User registration and sign-in
-- Public chat room accessible to all users
-
-## Contributing
+- User registration and sign-in.
+- Public chat room accessible to all users.
+- Authenticated user can chat to other users in only one public room. Everyone can see the message.
+- The system can identify which messages belong to specific user.
